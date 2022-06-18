@@ -607,7 +607,9 @@ class RestApiRequestImpl {
 
     RestApiRequest<Order> postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
             TimeInForce timeInForce, String quantity, String price, String reduceOnly,
-            String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType) {
+            String newClientOrderId, String stopPrice, String  closePosition, String activationPrice,
+                                    String callbackRate, WorkingType workingType, String priceProtect,
+                                    NewOrderRespType newOrderRespType) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
@@ -620,7 +622,11 @@ class RestApiRequestImpl {
                 .putToUrl("reduceOnly", reduceOnly)
                 .putToUrl("newClientOrderId", newClientOrderId)
                 .putToUrl("stopPrice", stopPrice)
+                .putToUrl("closePosition", closePosition)
+                .putToUrl("activationPrice", activationPrice)
+                .putToUrl("activationPrice", callbackRate)
                 .putToUrl("workingType", workingType)
+                .putToUrl("priceProtect", priceProtect)
                 .putToUrl("newOrderRespType", newOrderRespType);
 
         request.request = createRequestByPostWithSignature("/fapi/v1/order", builder);
@@ -643,6 +649,10 @@ class RestApiRequestImpl {
             result.setType(jsonWrapper.getString("type"));
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
+            result.setWorkingType(jsonWrapper.getString("closePosition"));
+            result.setWorkingType(jsonWrapper.getString("activationPrice"));
+            result.setWorkingType(jsonWrapper.getString("callbackRate"));
+            result.setWorkingType(jsonWrapper.getString("priceProtect"));
             return result;
         });
         return request;
@@ -766,6 +776,10 @@ class RestApiRequestImpl {
             result.setType(jsonWrapper.getString("type"));
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
+            result.setWorkingType(jsonWrapper.getString("closePosition"));
+            result.setWorkingType(jsonWrapper.getString("activationPrice"));
+            result.setWorkingType(jsonWrapper.getString("callbackRate"));
+            result.setWorkingType(jsonWrapper.getString("priceProtect"));
             return result;
         });
         return request;
@@ -862,6 +876,10 @@ class RestApiRequestImpl {
             result.setType(jsonWrapper.getString("type"));
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
+            result.setWorkingType(jsonWrapper.getString("closePosition"));
+            result.setWorkingType(jsonWrapper.getString("activationPrice"));
+            result.setWorkingType(jsonWrapper.getString("callbackRate"));
+            result.setWorkingType(jsonWrapper.getString("priceProtect"));
             return result;
         });
         return request;

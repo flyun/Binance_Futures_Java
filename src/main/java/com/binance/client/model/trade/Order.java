@@ -29,6 +29,14 @@ public class Order {
 
     private BigDecimal stopPrice;
 
+    private String closePosition;
+
+    private String activationPrice;
+
+    private String callbackRate;
+
+    private String priceProtect;
+
     private String symbol;
 
     private String timeInForce;
@@ -167,6 +175,38 @@ public class Order {
         this.workingType = workingType;
     }
 
+    public String getClosePosition() {
+        return closePosition;
+    }
+
+    public void setClosePosition(String closePosition) {
+        this.closePosition = closePosition;
+    }
+
+    public String getActivationPrice() {
+        return activationPrice;
+    }
+
+    public void setActivationPrice(String activationPrice) {
+        this.activationPrice = activationPrice;
+    }
+
+    public String getCallbackRate() {
+        return callbackRate;
+    }
+
+    public void setCallbackRate(String callbackRate) {
+        this.callbackRate = callbackRate;
+    }
+
+    public String getPriceProtect() {
+        return priceProtect;
+    }
+
+    public void setPriceProtect(String priceProtect) {
+        this.priceProtect = priceProtect;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
@@ -174,6 +214,8 @@ public class Order {
                 .append("orderId", orderId).append("origQty", origQty).append("price", price)
                 .append("reduceOnly", reduceOnly).append("side", side).append("positionSide", positionSide).append("status", status)
                 .append("stopPrice", stopPrice).append("symbol", symbol).append("timeInForce", timeInForce)
-                .append("type", type).append("updateTime", updateTime).append("workingType", workingType).toString();
+                .append("type", type).append("updateTime", updateTime).append("workingType", workingType)
+                .append("closePosition", closePosition).append("activationPrice", activationPrice)
+                .append("callbackRate", callbackRate).append("priceProtect", priceProtect).toString();
     }
 }
