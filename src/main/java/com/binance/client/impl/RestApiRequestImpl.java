@@ -624,7 +624,7 @@ class RestApiRequestImpl {
                 .putToUrl("stopPrice", stopPrice)
                 .putToUrl("closePosition", closePosition)
                 .putToUrl("activationPrice", activationPrice)
-                .putToUrl("activationPrice", callbackRate)
+                .putToUrl("callbackRate", callbackRate)
                 .putToUrl("workingType", workingType)
                 .putToUrl("priceProtect", priceProtect)
                 .putToUrl("newOrderRespType", newOrderRespType);
