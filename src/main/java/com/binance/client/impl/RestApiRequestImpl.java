@@ -650,8 +650,9 @@ class RestApiRequestImpl {
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
             result.setClosePosition(jsonWrapper.getBoolean("closePosition"));
-            result.setActivationPrice(jsonWrapper.getString("activatePrice"));
-            result.setPriceProtect(jsonWrapper.getString("priceRate"));
+            //todo 跟踪止损激活价格, 仅`TRAILING_STOP_MARKET` 订单返回此字段 后续需要处理
+//            result.setActivationPrice(jsonWrapper.getString("activatePrice"));
+//            result.setCallbackRate(jsonWrapper.getString("priceRate"));
             result.setPriceProtect(jsonWrapper.getString("priceProtect"));
             return result;
         });
