@@ -649,10 +649,10 @@ class RestApiRequestImpl {
             result.setType(jsonWrapper.getString("type"));
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
-            result.setWorkingType(jsonWrapper.getString("closePosition"));
-            result.setWorkingType(jsonWrapper.getString("activationPrice"));
-            result.setWorkingType(jsonWrapper.getString("callbackRate"));
-            result.setWorkingType(jsonWrapper.getString("priceProtect"));
+            result.setClosePosition(jsonWrapper.getBoolean("closePosition"));
+            result.setActivationPrice(jsonWrapper.getString("activatePrice"));
+            result.setPriceProtect(jsonWrapper.getString("priceRate"));
+            result.setPriceProtect(jsonWrapper.getString("priceProtect"));
             return result;
         });
         return request;

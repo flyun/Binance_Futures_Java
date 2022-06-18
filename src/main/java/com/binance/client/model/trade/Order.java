@@ -29,7 +29,7 @@ public class Order {
 
     private BigDecimal stopPrice;
 
-    private String closePosition;
+    private Boolean closePosition;
 
     private String activationPrice;
 
@@ -175,11 +175,11 @@ public class Order {
         this.workingType = workingType;
     }
 
-    public String getClosePosition() {
+    public Boolean getClosePosition() {
         return closePosition;
     }
 
-    public void setClosePosition(String closePosition) {
+    public void setClosePosition(Boolean closePosition) {
         this.closePosition = closePosition;
     }
 
