@@ -248,7 +248,14 @@ public interface SyncRequestClient {
      * @return Balances.
      */
     List<AccountBalance> getBalance();
-  
+
+    /**
+     * Get account balances.
+     *
+     * @return Balances.
+     */
+    List<AccountBalance> getVBalance();
+
     /**
      * Get current account information.
      *
