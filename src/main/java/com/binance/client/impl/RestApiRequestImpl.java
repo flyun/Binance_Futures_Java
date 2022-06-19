@@ -978,6 +978,33 @@ class RestApiRequestImpl {
         return request;
     }
 
+    RestApiRequest<List<AccountBalance>> getVBalance() {
+        RestApiRequest<List<AccountBalance>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build();
+        request.request = createRequestByGetWithSignature("/fapi/v2/balance", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<AccountBalance> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                AccountBalance element = new AccountBalance();
+                element.setAsset(item.getString("asset"));
+                element.setBalance(item.getBigDecimal("balance"));
+
+                element.setAccountAlias(item.getString("accountAlias"));
+                element.setCrossWalletBalance(item.getBigDecimal("crossWalletBalance"));
+                element.setCrossUnPnl(item.getBigDecimal("crossUnPnl"));
+                element.setAvailableBalance(item.getBigDecimal("availableBalance"));
+                element.setMaxWithdrawAmount(item.getBigDecimal("maxWithdrawAmount"));
+                element.setMarginAvailable(item.getBoolean("marginAvailable"));
+                element.setUpdateTime(item.getInteger("updateTime"));
+                result.add(element);
+            });
+            return result;
+        });
+        return request;
+    }
+
     RestApiRequest<AccountInformation> getAccountInformation() {
         RestApiRequest<AccountInformation> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
