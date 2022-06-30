@@ -16,6 +16,7 @@ import com.binance.client.model.market.*;
 import com.binance.client.model.trade.*;
 import com.binance.client.model.enums.*;
 
+import com.binance.client.untils.JsonUntil;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
 
@@ -861,26 +862,28 @@ class RestApiRequestImpl {
 
         request.jsonParser = (jsonWrapper -> {
             Order result = new Order();
-            result.setClientOrderId(jsonWrapper.getString("clientOrderId"));
-            result.setCumQuote(jsonWrapper.getBigDecimal("cumQuote"));
-            result.setExecutedQty(jsonWrapper.getBigDecimal("executedQty"));
-            result.setOrderId(jsonWrapper.getLong("orderId"));
-            result.setOrigQty(jsonWrapper.getBigDecimal("origQty"));
-            result.setPrice(jsonWrapper.getBigDecimal("price"));
-            result.setReduceOnly(jsonWrapper.getBoolean("reduceOnly"));
-            result.setSide(jsonWrapper.getString("side"));
-            result.setPositionSide(jsonWrapper.getString("positionSide"));
-            result.setStatus(jsonWrapper.getString("status"));
-            result.setStopPrice(jsonWrapper.getBigDecimal("stopPrice"));
-            result.setSymbol(jsonWrapper.getString("symbol"));
-            result.setTimeInForce(jsonWrapper.getString("timeInForce"));
-            result.setType(jsonWrapper.getString("type"));
-            result.setUpdateTime(jsonWrapper.getLong("updateTime"));
-            result.setWorkingType(jsonWrapper.getString("workingType"));
-            result.setWorkingType(jsonWrapper.getString("closePosition"));
-            result.setWorkingType(jsonWrapper.getString("activationPrice"));
-            result.setWorkingType(jsonWrapper.getString("callbackRate"));
-            result.setWorkingType(jsonWrapper.getString("priceProtect"));
+            result.setClientOrderId(JsonUntil.getStringSafe("clientOrderId", jsonWrapper));
+            result.setCumQuote(JsonUntil.getBigDecimalSafe("cumQuote", jsonWrapper));
+            result.setExecutedQty(JsonUntil.getBigDecimalSafe("executedQty" ,jsonWrapper));
+            result.setOrderId(JsonUntil.getLongSafe("orderId", jsonWrapper));
+            result.setOrigQty(JsonUntil.getBigDecimalSafe("origQty", jsonWrapper));
+            result.setPrice(JsonUntil.getBigDecimalSafe("price", jsonWrapper));
+            result.setReduceOnly(JsonUntil.getBooleanSafe("reduceOnly", jsonWrapper));
+            result.setSide(JsonUntil.getStringSafe("side", jsonWrapper));
+            result.setPositionSide(JsonUntil.getStringSafe("positionSide", jsonWrapper));
+            result.setStatus(JsonUntil.getStringSafe("status", jsonWrapper));
+            result.setStopPrice(JsonUntil.getBigDecimalSafe("stopPrice", jsonWrapper));
+            result.setSymbol(JsonUntil.getStringSafe("symbol", jsonWrapper));
+            result.setTimeInForce(JsonUntil.getStringSafe("timeInForce", jsonWrapper));
+            result.setType(JsonUntil.getStringSafe("type", jsonWrapper));
+            result.setUpdateTime(JsonUntil.getLongSafe("updateTime", jsonWrapper));
+            result.setWorkingType(JsonUntil.getStringSafe("workingType", jsonWrapper));
+            result.setWorkingType(JsonUntil.getStringSafe("closePosition", jsonWrapper));
+            //在买入卖出时不时追踪价格则不返回此字段，造成解析出错，所以增加此工具类
+            result.setWorkingType(JsonUntil.getStringSafe("activationPrice", jsonWrapper));
+            result.setWorkingType(JsonUntil.getStringSafe("callbackRate", jsonWrapper));
+            result.setWorkingType(JsonUntil.getStringSafe("priceProtect", jsonWrapper));
+            result.setWorkingType(JsonUntil.getStringSafe("avgPrice", jsonWrapper));
             return result;
         });
         return request;
