@@ -1124,13 +1124,13 @@ class RestApiRequestImpl {
     RestApiRequest<List<PositionRisk>> getV2PositionRisk(String symbol) {
         RestApiRequest<List<PositionRisk>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
-                //recvWindow
-                //服务器收到请求时会判断请求中的时间戳，如果是5000毫秒之前发出的，则请求会被认为无效。
-                //这个时间窗口值可以通过发送可选参数recvWindow来自定义。
-                //关于交易时效性 互联网状况并不100%可靠，不可完全依赖,因此你的程序本地到币安服务器的时延会有抖动.
-                // 这是我们设置recvWindow的目的所在，如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置recvWindow以达到你的要求。
-                // 不推荐使用5秒以上的recvWindow
                 .putToUrl("symbol", symbol);
+        //recvWindow
+        //服务器收到请求时会判断请求中的时间戳，如果是5000毫秒之前发出的，则请求会被认为无效。
+        //这个时间窗口值可以通过发送可选参数recvWindow来自定义。
+        //关于交易时效性 互联网状况并不100%可靠，不可完全依赖,因此你的程序本地到币安服务器的时延会有抖动.
+        // 这是我们设置recvWindow的目的所在，如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置recvWindow以达到你的要求。
+        // 不推荐使用5秒以上的recvWindow
         request.request = createRequestByGetWithSignature("/fapi/v2/positionRisk", builder);
 
         request.jsonParser = (jsonWrapper -> {
