@@ -16,7 +16,7 @@ import com.binance.client.model.market.*;
 import com.binance.client.model.trade.*;
 import com.binance.client.model.enums.*;
 
-import com.binance.client.untils.JsonUntil;
+import com.binance.client.utils.JsonUtil;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
 
@@ -862,28 +862,28 @@ class RestApiRequestImpl {
 
         request.jsonParser = (jsonWrapper -> {
             Order result = new Order();
-            result.setClientOrderId(JsonUntil.getStringSafe("clientOrderId", jsonWrapper));
-            result.setCumQuote(JsonUntil.getBigDecimalSafe("cumQuote", jsonWrapper));
-            result.setExecutedQty(JsonUntil.getBigDecimalSafe("executedQty" ,jsonWrapper));
-            result.setOrderId(JsonUntil.getLongSafe("orderId", jsonWrapper));
-            result.setOrigQty(JsonUntil.getBigDecimalSafe("origQty", jsonWrapper));
-            result.setPrice(JsonUntil.getBigDecimalSafe("price", jsonWrapper));
-            result.setReduceOnly(JsonUntil.getBooleanSafe("reduceOnly", jsonWrapper));
-            result.setSide(JsonUntil.getStringSafe("side", jsonWrapper));
-            result.setPositionSide(JsonUntil.getStringSafe("positionSide", jsonWrapper));
-            result.setStatus(JsonUntil.getStringSafe("status", jsonWrapper));
-            result.setStopPrice(JsonUntil.getBigDecimalSafe("stopPrice", jsonWrapper));
-            result.setSymbol(JsonUntil.getStringSafe("symbol", jsonWrapper));
-            result.setTimeInForce(JsonUntil.getStringSafe("timeInForce", jsonWrapper));
-            result.setType(JsonUntil.getStringSafe("type", jsonWrapper));
-            result.setUpdateTime(JsonUntil.getLongSafe("updateTime", jsonWrapper));
-            result.setWorkingType(JsonUntil.getStringSafe("workingType", jsonWrapper));
-            result.setWorkingType(JsonUntil.getStringSafe("closePosition", jsonWrapper));
+            result.setClientOrderId(JsonUtil.getStringSafe("clientOrderId", jsonWrapper));
+            result.setCumQuote(JsonUtil.getBigDecimalSafe("cumQuote", jsonWrapper));
+            result.setExecutedQty(JsonUtil.getBigDecimalSafe("executedQty" ,jsonWrapper));
+            result.setOrderId(JsonUtil.getLongSafe("orderId", jsonWrapper));
+            result.setOrigQty(JsonUtil.getBigDecimalSafe("origQty", jsonWrapper));
+            result.setPrice(JsonUtil.getBigDecimalSafe("price", jsonWrapper));
+            result.setReduceOnly(JsonUtil.getBooleanSafe("reduceOnly", jsonWrapper));
+            result.setSide(JsonUtil.getStringSafe("side", jsonWrapper));
+            result.setPositionSide(JsonUtil.getStringSafe("positionSide", jsonWrapper));
+            result.setStatus(JsonUtil.getStringSafe("status", jsonWrapper));
+            result.setStopPrice(JsonUtil.getBigDecimalSafe("stopPrice", jsonWrapper));
+            result.setSymbol(JsonUtil.getStringSafe("symbol", jsonWrapper));
+            result.setTimeInForce(JsonUtil.getStringSafe("timeInForce", jsonWrapper));
+            result.setType(JsonUtil.getStringSafe("type", jsonWrapper));
+            result.setUpdateTime(JsonUtil.getLongSafe("updateTime", jsonWrapper));
+            result.setWorkingType(JsonUtil.getStringSafe("workingType", jsonWrapper));
+            result.setWorkingType(JsonUtil.getStringSafe("closePosition", jsonWrapper));
             //在买入卖出时不时追踪价格则不返回此字段，造成解析出错，所以增加此工具类
-            result.setWorkingType(JsonUntil.getStringSafe("activationPrice", jsonWrapper));
-            result.setWorkingType(JsonUntil.getStringSafe("callbackRate", jsonWrapper));
-            result.setWorkingType(JsonUntil.getStringSafe("priceProtect", jsonWrapper));
-            result.setWorkingType(JsonUntil.getStringSafe("avgPrice", jsonWrapper));
+            result.setWorkingType(JsonUtil.getStringSafe("activationPrice", jsonWrapper));
+            result.setWorkingType(JsonUtil.getStringSafe("callbackRate", jsonWrapper));
+            result.setWorkingType(JsonUtil.getStringSafe("priceProtect", jsonWrapper));
+            result.setWorkingType(JsonUtil.getStringSafe("avgPrice", jsonWrapper));
             return result;
         });
         return request;
@@ -1093,6 +1093,45 @@ class RestApiRequestImpl {
         RestApiRequest<List<PositionRisk>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
         request.request = createRequestByGetWithSignature("/fapi/v1/positionRisk", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<PositionRisk> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                PositionRisk element = new PositionRisk();
+                element.setEntryPrice(item.getBigDecimal("entryPrice"));
+                element.setLeverage(item.getBigDecimal("leverage"));
+                if(item.getString("maxNotionalValue").equals("INF")) {
+                    element.setMaxNotionalValue(Double.POSITIVE_INFINITY);
+                } else {
+                    element.setMaxNotionalValue(item.getDouble("maxNotionalValue"));
+                }
+                element.setLiquidationPrice(item.getBigDecimal("liquidationPrice"));
+                element.setMarkPrice(item.getBigDecimal("markPrice"));
+                element.setPositionAmt(item.getBigDecimal("positionAmt"));
+                element.setSymbol(item.getString("symbol"));
+                element.setIsolatedMargin(item.getString("isolatedMargin"));
+                element.setPositionSide(item.getString("positionSide"));
+                element.setMarginType(item.getString("marginType"));
+                element.setUnrealizedProfit(item.getBigDecimal("unRealizedProfit"));
+                result.add(element);
+            });
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<PositionRisk>> getV2PositionRisk(String symbol) {
+        RestApiRequest<List<PositionRisk>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                //recvWindow
+                //服务器收到请求时会判断请求中的时间戳，如果是5000毫秒之前发出的，则请求会被认为无效。
+                //这个时间窗口值可以通过发送可选参数recvWindow来自定义。
+                //关于交易时效性 互联网状况并不100%可靠，不可完全依赖,因此你的程序本地到币安服务器的时延会有抖动.
+                // 这是我们设置recvWindow的目的所在，如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置recvWindow以达到你的要求。
+                // 不推荐使用5秒以上的recvWindow
+                .putToUrl("symbol", symbol);
+        request.request = createRequestByGetWithSignature("/fapi/v2/positionRisk", builder);
 
         request.jsonParser = (jsonWrapper -> {
             List<PositionRisk> result = new LinkedList<>();

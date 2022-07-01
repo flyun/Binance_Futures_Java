@@ -11,5 +11,6 @@ public class GetPositionRisk {
         SyncRequestClient syncRequestClient = SyncRequestClient.create(PrivateConfig.API_KEY, PrivateConfig.SECRET_KEY,
                 options);
         System.out.println(syncRequestClient.getPositionRisk());
+//        System.out.println(syncRequestClient.getV2PositionRisk("BTCUSDT"));
     }
 }

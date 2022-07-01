@@ -1,4 +1,4 @@
-package com.binance.client.untils;
+package com.binance.client.utils;
 
 import com.binance.client.impl.utils.JsonWrapper;
 
@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  * json工具类
  */
-public class JsonUntil {
+public class JsonUtil {
 
     public static String getStringSafe(String name, JsonWrapper jsonWrapper) {
 
