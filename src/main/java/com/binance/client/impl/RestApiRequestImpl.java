@@ -651,7 +651,9 @@ class RestApiRequestImpl {
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
             result.setClosePosition(jsonWrapper.getBoolean("closePosition"));
-            //todo 跟踪止损激活价格, 仅`TRAILING_STOP_MARKET` 订单返回此字段 后续需要处理
+            // 跟踪止损激活价格, 仅`TRAILING_STOP_MARKET` 订单返回此字段 需要安全处理
+            result.setActivationPrice(JsonUtil.getStringSafe("activatePrice", jsonWrapper));
+            result.setActivationPrice(JsonUtil.getStringSafe("priceRate", jsonWrapper));
 //            result.setActivationPrice(jsonWrapper.getString("activatePrice"));
 //            result.setCallbackRate(jsonWrapper.getString("priceRate"));
             result.setPriceProtect(jsonWrapper.getString("priceProtect"));
